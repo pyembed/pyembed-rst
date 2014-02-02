@@ -1,0 +1,22 @@
+language: python
+python:
+  - '2.7'
+  - '3.3'
+install:
+  - pip install -e .
+  - pip install coverage coveralls
+script:
+  - coverage run setup.py test
+  - coveralls
+  - coverage report --fail-under=100
+deploy:
+  provider: pypi
+  user:
+    secure: PakTPIXVDYK/WBj/BlPg+bvJidoTi5Pl/J3lJ/ONu8r5g9idOAqO65LrbhqhqsPXPObnS1rcJDT0VUrA5SNtQxMnENRZv6lUhcwHG0O0OXWzQ8vOHtv49cccOlouWwu2pBRmhvhVmKpFo4H5HnXzCCIVRNsyTOodWRAe28jjQ6M=
+  password:
+    secure: ADt+9CoDrodjrPE5ZbWFlj7jqaSbBs81B2wSf5MZrMjaf51BB2nKJYhPffdMDQ3EB6+yZZizJLJlxv2GWOin0UEMIaUNVfFRdBMrhaOn08jTT528gTYGkwBBzNvfwb8VcCBzz53Fn5/c9bvG3gxxhQDWTrSm9OSRKn4jT6dsoFA=
+  on:
+    python: 2.7
+    tags: true
+    repo: pyembed/pyembed-rst
+

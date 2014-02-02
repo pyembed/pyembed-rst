@@ -1,0 +1,6 @@
+[run]
+include =
+  pyembed/rst/*.py
+
+omit =
+  pyembed/rst/test/*.py
