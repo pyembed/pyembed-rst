@@ -20,37 +20,41 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-from docutils.parsers.rst import Directive, directives
+from pyembed.rst import PyEmbedRstHandler
 
-from pyembed.core import PyEmbed
-from pyembed.rst.handler import PyEmbedRstHandler
+from docutils.core import publish_parts
+from hamcrest import assert_that, equal_to, has_length
+from mock import Mock
 
 
-class PyEmbedRst(object):
+def test_should_replace_url_with_embedding():
+    generic_embed_test({}, None, None)
 
-    def __init__(self, renderer=None):
-        if renderer:
-            self.pyembed = PyEmbed(renderer)
-        else:
-            self.pyembed = PyEmbed()
 
-    def register(self):
-        directive = self.__create_directive()
-        directives.register_directive('embed', directive)
+def test_should_apply_max_width():
+    generic_embed_test({'max_width': 100}, 100, None)
 
-    def __create_directive(self):
-        embed = PyEmbedRstHandler(self.pyembed).embed
 
-        class PyEmbedRstDirective(Directive):
-            required_arguments = 1
-            optional_arguments = 0
-            option_spec = {
-                'max_width': directives.nonnegative_int,
-                'max_height': directives.nonnegative_int
-            }
-            has_content = False
+def test_should_apply_max_height():
+    generic_embed_test({'max_height': 200}, None, 200)
 
-            def run(self):
-                return embed(self.arguments, self.options)
 
-        return PyEmbedRstDirective
+def test_should_apply_max_width_and_height():
+    generic_embed_test({'max_width': 100, 'max_height': 200}, 100, 200)
+
+
+def test_should_ignore_other_options():
+    generic_embed_test({'max_height': 200, 'extra': 'value'}, None, 200)
+
+
+def generic_embed_test(options, *embed_params):
+    pyembed = Mock()
+    pyembed.embed.return_value = '<h1>Bees!</h1>'
+
+    handler = PyEmbedRstHandler(pyembed)
+
+    result = handler.embed(['http://example.com'], options)
+    assert_that(result, has_length(1))
+    assert_that(result[0].astext(), equal_to('<h1>Bees!</h1>'))
+
+    pyembed.embed.assert_called_with('http://example.com', *embed_params)
