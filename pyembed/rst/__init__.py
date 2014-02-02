@@ -35,17 +35,28 @@ class PyEmbedRst(object):
             self.pyembed = PyEmbed()
 
     def register(self):
-        directive = self.__create_directive(self.pyembed)
+        directive = self.create_directive()
         directives.register_directive('embed', directive)
 
-    def __create_directive(self, pyembed):
+    def create_directive(self):
+        pyembed = self.pyembed
+
         class PyEmbedRstDirective(Directive):
             required_arguments = 1
             optional_arguments = 0
+            option_spec = {
+              'max_width': directives.nonnegative_int,
+              'max_height': directives.nonnegative_int
+            }
             has_content = False
 
             def run(self):
                 url = self.arguments[0]
-                return [raw(text=pyembed.embed(url), format='html')]
+                max_width = self.options.get('max_width')
+                max_height = self.options.get('max_height')
+
+                embedding = pyembed.embed(url, max_width, max_height)
+
+                return [raw(text=embedding, format='html')]
 
         return PyEmbedRstDirective

@@ -26,7 +26,6 @@ from pyembed.rst import PyEmbedRst
 from docutils.core import publish_parts
 
 from hamcrest import assert_that, contains_string, equal_to, is_not
-import pytest
 
 
 class DummyRenderer(render.PyEmbedRenderer):
@@ -44,6 +43,17 @@ def test_should_get_correct_embedding():
         writer_name='html')['body']
 
     assert_that(embedding, contains_string('Four more years.'))
+    assert_that(embedding, is_not(contains_string('&gt;')))
+
+
+def test_should_embed_with_max_height():
+    PyEmbedRst().register()
+
+    embedding = publish_parts(
+        """.. embed:: http://www.youtube.com/watch?v=9bZkp7q19f0
+              :max_height: 200""", writer_name='html')['body']
+
+    assert_that(embedding, contains_string('height="200"'))
     assert_that(embedding, is_not(contains_string('&gt;')))
 
 
