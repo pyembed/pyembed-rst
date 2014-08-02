@@ -21,7 +21,6 @@
 # THE SOFTWARE.
 
 from docutils.nodes import raw
-from pyembed.core import PyEmbed
 
 
 class PyEmbedRstHandler(object):

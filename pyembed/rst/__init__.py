@@ -30,7 +30,7 @@ class PyEmbedRst(object):
 
     def __init__(self, renderer=None):
         if renderer:
-            self.pyembed = PyEmbed(renderer)
+            self.pyembed = PyEmbed(renderer=renderer)
         else:
             self.pyembed = PyEmbed()
 

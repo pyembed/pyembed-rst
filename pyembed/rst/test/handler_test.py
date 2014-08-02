@@ -22,7 +22,6 @@
 
 from pyembed.rst import PyEmbedRstHandler
 
-from docutils.core import publish_parts
 from hamcrest import assert_that, equal_to, has_length
 from mock import Mock
 
