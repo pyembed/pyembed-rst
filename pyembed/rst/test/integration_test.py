@@ -24,6 +24,7 @@ from pyembed.core import render
 from pyembed.rst import PyEmbedRst
 
 from docutils.core import publish_parts
+import vcr
 
 
 class DummyRenderer(render.PyEmbedRenderer):
@@ -33,6 +34,7 @@ class DummyRenderer(render.PyEmbedRenderer):
             (response.title, response.author_name, content_url)
 
 
+@vcr.use_cassette('pyembed/rst/test/fixtures/cassettes/correct_embedding.yml')
 def test_should_get_correct_embedding():
     PyEmbedRst().register()
 
@@ -44,6 +46,7 @@ def test_should_get_correct_embedding():
     assert '&gt;' not in embedding
 
 
+@vcr.use_cassette('pyembed/rst/test/fixtures/cassettes/max_height.yml')
 def test_should_embed_with_max_height():
     PyEmbedRst().register()
 
@@ -55,6 +58,7 @@ def test_should_embed_with_max_height():
     assert '&gt;' not in embedding
 
 
+@vcr.use_cassette('pyembed/rst/test/fixtures/cassettes/custom_renderer.yml')
 def test_should_embed_with_custom_renderer():
     PyEmbedRst(DummyRenderer()).register()
 
