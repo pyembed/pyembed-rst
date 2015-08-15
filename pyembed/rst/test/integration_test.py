@@ -25,8 +25,6 @@ from pyembed.rst import PyEmbedRst
 
 from docutils.core import publish_parts
 
-from hamcrest import assert_that, contains_string, equal_to, is_not
-
 
 class DummyRenderer(render.PyEmbedRenderer):
 
@@ -42,8 +40,8 @@ def test_should_get_correct_embedding():
         '.. embed:: https://twitter.com/BarackObama/status/266031293945503744',
         writer_name='html')['body']
 
-    assert_that(embedding, contains_string('Four more years.'))
-    assert_that(embedding, is_not(contains_string('&gt;')))
+    assert 'Four more years.' in embedding
+    assert '&gt;' not in embedding
 
 
 def test_should_embed_with_max_height():
@@ -53,8 +51,8 @@ def test_should_embed_with_max_height():
         """.. embed:: http://www.youtube.com/watch?v=9bZkp7q19f0
               :max_height: 200""", writer_name='html')['body']
 
-    assert_that(embedding, contains_string('height="200"'))
-    assert_that(embedding, is_not(contains_string('&gt;')))
+    assert 'height="200"' in embedding
+    assert '&gt;' not in embedding
 
 
 def test_should_embed_with_custom_renderer():
@@ -64,6 +62,6 @@ def test_should_embed_with_custom_renderer():
         '.. embed:: http://www.youtube.com/watch?v=qrO4YZeyl0I',
         writer_name='html')['body']
 
-    assert_that(embedding, equal_to(
-        '<p>Lady Gaga - Bad Romance by LadyGagaVEVO from ' +
-        'http://www.youtube.com/watch?v=qrO4YZeyl0I</p>'))
+    assert embedding == \
+        '<p>Lady Gaga - Bad Romance by LadyGagaVEVO from ' + \
+        'http://www.youtube.com/watch?v=qrO4YZeyl0I</p>'

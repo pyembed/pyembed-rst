@@ -59,7 +59,6 @@ setup(
         'docutils'
     ],
     tests_require=[
-        'PyHamcrest',
         'mock',
         'pytest'
     ],

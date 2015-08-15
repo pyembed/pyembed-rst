@@ -22,7 +22,6 @@
 
 from pyembed.rst import PyEmbedRstHandler
 
-from hamcrest import assert_that, equal_to, has_length
 from mock import Mock
 
 
@@ -53,7 +52,7 @@ def generic_embed_test(options, *embed_params):
     handler = PyEmbedRstHandler(pyembed)
 
     result = handler.embed(['http://example.com'], options)
-    assert_that(result, has_length(1))
-    assert_that(result[0].astext(), equal_to('<h1>Bees!</h1>'))
+    assert len(result) == 1
+    assert result[0].astext() == '<h1>Bees!</h1>'
 
     pyembed.embed.assert_called_with('http://example.com', *embed_params)
